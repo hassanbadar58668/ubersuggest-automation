@@ -1,0 +1,30 @@
+# ============================================================
+# Ubersuggest Automation - Config File
+# ============================================================
+
+project:
+  name: "Ubersuggest Automation"
+  version: "1.0.0"
+
+# إعدادات WebDroid
+webdroid:
+  host: "127.0.0.1"
+  port: 8765
+  timeout: 30
+
+# إعدادات Ubersuggest
+ubersuggest:
+  base_url: "https://app.neilpatel.com"
+  timeout: 30
+  max_retries: 3
+
+# إعدادات المعدل (Rate Limiting)
+rate_limiting:
+  enabled: true
+  requests_per_minute: 5
+
+# الحسابات (مؤقتاً)
+accounts:
+  - email: "test@example.com"
+    password: "password123"
+    enabled: true
