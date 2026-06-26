@@ -2,9 +2,8 @@ name: Ubersuggest Automation
 
 on:
   schedule:
-    # التشغيل كل 6 ساعات
     - cron: '0 */6 * * *'
-  workflow_dispatch:  # تشغيل يدوي من GitHub
+  workflow_dispatch:
 
 jobs:
   automate:
@@ -25,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests cloudscraper pyyaml selenium undetected-chromedriver beautifulsoup4 lxml
+        pip install -r requirements.txt
     
     - name: Setup Chrome
       run: |
@@ -40,7 +39,7 @@ jobs:
       env:
         ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
       run: |
-        python src/main.py
+        python src/cloud_main.py
     
     - name: Upload results
       if: always()
