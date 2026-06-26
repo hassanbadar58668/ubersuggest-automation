@@ -23,13 +23,23 @@ rate_limiting:
   enabled: true
   requests_per_minute: 3
 
-# إعدادات البروكسي (معطل)
+# إعدادات البروكسي - Webshare Proxies
 proxy:
-  enabled: false
+  enabled: true
   rotation_strategy: "round_robin"
-  list: []
+  list:
+    - "http://cfnqtxww:2zn08zr9t8au@31.59.20.176:6754"
+    - "http://cfnqtxww:2zn08zr9t8au@31.56.127.193:7684"
+    - "http://cfnqtxww:2zn08zr9t8au@45.38.107.97:6014"
+    - "http://cfnqtxww:2zn08zr9t8au@38.154.203.95:5863"
+    - "http://cfnqtxww:2zn08zr9t8au@198.105.121.200:6462"
+    - "http://cfnqtxww:2zn08zr9t8au@64.137.96.74:6641"
+    - "http://cfnqtxww:2zn08zr9t8au@198.23.243.226:6361"
+    - "http://cfnqtxww:2zn08zr9t8au@38.154.185.97:6370"
+    - "http://cfnqtxww:2zn08zr9t8au@142.111.67.146:5611"
+    - "http://cfnqtxww:2zn08zr9t8au@191.96.254.138:6185"
 
-# حسابات التجربة
+# الحسابات
 accounts:
   - email: "ezz1yn0vb7@ruutukf.com"
     password: "*tW4kEI5hj2aRJP&"
