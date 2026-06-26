@@ -33,7 +33,8 @@ def test_login():
         sb.cdp.wait_for_element_visible('input[type="password"]', timeout=10)
         sb.cdp.type('input[type="password"]', password)
 
-        sb.cdp.wait_for_element_clickable('button[type="submit"]', timeout=10)
+        # استخدم wait_for_element_visible بدلاً من wait_for_element_clickable
+        sb.cdp.wait_for_element_visible('button[type="submit"]', timeout=10)
         sb.cdp.click('button[type="submit"]')
         print("✅ تم الضغط على تسجيل الدخول")
 
