@@ -23,7 +23,16 @@ rate_limiting:
   enabled: true
   requests_per_minute: 5
 
-# الحسابات (مؤقتاً)
+# إعدادات البروكسي
+proxy:
+  enabled: false
+  rotation_strategy: "round_robin"  # round_robin, random
+  list:
+    # - "http://user:pass@ip:port"
+    # - "socks5://ip:port"
+    # - "http://ip:port"
+
+# الحسابات
 accounts:
   - email: "test@example.com"
     password: "password123"

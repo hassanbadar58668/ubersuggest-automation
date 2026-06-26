@@ -226,3 +226,38 @@ def main():
 
 if __name__ == "__main__":
     main()
+# إضافة استيراد ProxyManager
+from proxy_manager import get_proxy_manager
+
+# في دالة setup_driver، نضيف دعم البروكسي
+    def setup_driver(self):
+        """إعداد متصفح Chrome مع إخفاء البصمة ودعم البروكسي"""
+        logger.info("🔄 إعداد المتصفح...")
+        
+        options = uc.ChromeOptions()
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--window-size=1920,1080')
+        options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+        
+        # إضافة بروكسي إذا كان مفعل
+        proxy_config = self.config.get('proxy', {})
+        if proxy_config.get('enabled', False):
+            proxy_mgr = get_proxy_manager()
+            proxy = proxy_mgr.get_proxy()
+            if proxy:
+                proxy_url = proxy["url"]
+                options.add_argument(f'--proxy-server={proxy_url}')
+                logger.info(f"🔗 استخدام بروكسي: {proxy_url}")
+            else:
+                logger.warning("⚠️ لا توجد بروكسيات متاحة")
+        
+        try:
+            self.driver = uc.Chrome(options=options)
+            logger.info("✅ المتصفح جاهز")
+            return True
+        except Exception as e:
+            logger.error(f"❌ فشل إعداد المتصفح: {e}")
+            return False
