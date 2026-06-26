@@ -21,19 +21,19 @@ ubersuggest:
 # إعدادات المعدل (Rate Limiting)
 rate_limiting:
   enabled: true
-  requests_per_minute: 5
+  requests_per_minute: 3
 
-# إعدادات البروكسي
+# إعدادات البروكسي (معطل)
 proxy:
   enabled: false
-  rotation_strategy: "round_robin"  # round_robin, random
-  list:
-    # - "http://user:pass@ip:port"
-    # - "socks5://ip:port"
-    # - "http://ip:port"
+  rotation_strategy: "round_robin"
+  list: []
 
-# الحسابات
+# حسابات التجربة
 accounts:
-  - email: "test@example.com"
-    password: "password123"
+  - email: "ezz1yn0vb7@ruutukf.com"
+    password: "*tW4kEI5hj2aRJP&"
+    enabled: true
+  - email: "ilj5vg3mki@bltiwd.com"
+    password: "F)LBR6Ip%KeZ9M5G"
     enabled: true
