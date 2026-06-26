@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install webdriver-manager
+        pip install seleniumbase webdriver-manager pyyaml
     
     - name: Setup Chrome
       run: |
@@ -35,13 +35,11 @@ jobs:
     
     - name: Create directories
       run: |
-        mkdir -p logs data sessions screenshots
+        mkdir -p logs data sessions screenshots debug
     
-    - name: Run automation
-      env:
-        ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+    - name: Run Turnstile test with proxy
       run: |
-        python src/cloud_main.py
+        python src/test_turnstile.py
     
     - name: Upload results
       if: always()
@@ -53,4 +51,7 @@ jobs:
           data/
           sessions/
           screenshots/
+          debug/
           *.log
+          *.png
+          *.html
