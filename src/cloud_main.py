@@ -23,13 +23,20 @@ class CloudAutomation:
 
     def setup_driver(self):
         try:
-            import undetected_chromedriver as uc
-            options = uc.ChromeOptions()
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options
+            from webdriver_manager.chrome import ChromeDriverManager
+            from selenium.webdriver.chrome.service import Service
+            
+            options = Options()
             options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--disable-gpu')
-            self.driver = uc.Chrome(options=options)
+            options.add_argument('--window-size=1920,1080')
+            
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=options)
             logger.info("✅ المتصفح جاهز")
             return True
         except Exception as e:
