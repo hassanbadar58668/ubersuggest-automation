@@ -1,9 +1,9 @@
-from seleniumbase import SB
-import time
+import requests
 import yaml
+import json
 
 def test_login():
-    print("🚀 بدء اختبار تسجيل الدخول...")
+    print("🚀 بدء اختبار تسجيل الدخول عبر API...")
 
     with open("config/config.yaml", "r") as f:
         config = yaml.safe_load(f)
@@ -20,32 +20,37 @@ def test_login():
     print(f"📧 {email}")
     print(f"🔑 {password}")
 
-    proxy = config.get("proxy", {}).get("list", [None])[0]
+    url = "https://app.neilpatel.com/api/login"
 
-    # 1️⃣ استخدم SB مع xvfb=True فقط (من غير headless2)
-    with SB(uc=True, xvfb=True) as sb:
-        # 2️⃣ فعّل CDP Mode
-        sb.activate_cdp_mode("https://app.neilpatel.com/en/login", proxy=proxy)
-        print("✅ تم تحميل الصفحة")
-        time.sleep(5)
+    payload = {
+        "email": email,
+        "password": password
+    }
 
-        # 3️⃣ استخدم wait_for_element_visible قبل الكتابة
-        sb.cdp.wait_for_element_visible('input[type="email"]', timeout=15)
-        sb.cdp.type('input[type="email"]', email)
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
 
-        sb.cdp.wait_for_element_visible('input[type="password"]', timeout=10)
-        sb.cdp.type('input[type="password"]', password)
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        print(f"📡 Status Code: {response.status_code}")
+        print(f"📦 Response: {response.text}")
 
-        # 4️⃣ استخدم gui_click_element كتجربة بديلة (توصية الـ senior)
-        try:
-            sb.cdp.gui_click_element('button[type="submit"]')
-        except:
-            sb.cdp.click('button[type="submit"]')
-        print("✅ تم الضغط على تسجيل الدخول")
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('user'):
+                print("✅ تسجيل الدخول ناجح!")
+                # حفظ النتيجة
+                with open("login_result.json", "w") as f:
+                    json.dump(data, f, indent=2)
+            else:
+                print("❌ فشل تسجيل الدخول: بيانات غير صحيحة أو مرفوضة")
+        else:
+            print(f"❌ فشل الطلب: {response.status_code}")
 
-        time.sleep(5)
-        sb.save_screenshot("login_result.png")
-        print(f"🔗 URL: {sb.get_current_url()}")
+    except Exception as e:
+        print(f"💥 خطأ: {e}")
 
 if __name__ == "__main__":
     test_login()
