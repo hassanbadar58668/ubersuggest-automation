@@ -5,10 +5,9 @@ Playwright + Stealth bypass for Ubersuggest login
 import asyncio
 import yaml
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
 
 async def test_login():
-    print("🚀 بدء اختبار تسجيل الدخول باستخدام Playwright + Stealth...")
+    print("🚀 بدء اختبار تسجيل الدخول باستخدام Playwright...")
 
     with open("config/config.yaml", "r") as f:
         config = yaml.safe_load(f)
@@ -26,37 +25,52 @@ async def test_login():
     print(f"🔑 {password}")
 
     async with async_playwright() as p:
-        # 1️⃣ تشغيل المتصفح (بدون headless عشان التخفي)
+        # تشغيل المتصفح (بدون headless عشان التخفي)
         browser = await p.chromium.launch(
-            headless=False,  # مهم!
+            headless=False,
             args=['--no-sandbox', '--disable-dev-shm-usage']
         )
+        
+        # إعدادات المتصفح (تخفي)
         context = await browser.new_context(
             viewport={"width": 1920, "height": 1080},
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
         page = await context.new_page()
 
-        # 2️⃣ تفعيل stealth mode
-        await stealth_async(page)
+        # تفعيل stealth (عن طريق إزالة علامات الأتمتة)
+        await page.add_init_script("""
+            // إزالة علامة webdriver
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
+            // محاكاة plugins
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [1, 2, 3, 4, 5]
+            });
+            // محاكاة languages
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en']
+            });
+        """)
 
-        # 3️⃣ فتح صفحة تسجيل الدخول
+        # فتح صفحة تسجيل الدخول
         print("⏳ جاري تحميل الصفحة...")
         await page.goto("https://app.neilpatel.com/en/login", wait_until="networkidle")
-        await page.wait_for_timeout(5000)  # انتظار 5 ثواني
+        await page.wait_for_timeout(5000)
 
-        # 4️⃣ ملء الحقول
+        # ملء الحقول
         await page.fill('input[type="email"]', email)
         await page.fill('input[type="password"]', password)
 
-        # 5️⃣ الضغط على زر تسجيل الدخول
+        # الضغط على زر تسجيل الدخول
         await page.click('button[type="submit"]')
         print("✅ تم الضغط على تسجيل الدخول")
 
-        # 6️⃣ انتظار التوجيه
+        # انتظار التوجيه
         await page.wait_for_timeout(5000)
 
-        # 7️⃣ التحقق من النتيجة
+        # التحقق من النتيجة
         current_url = page.url
         print(f"🔗 URL: {current_url}")
 
