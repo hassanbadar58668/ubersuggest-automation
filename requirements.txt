@@ -8,3 +8,5 @@ lxml>=4.9.3
 seleniumbase>=4.37.2
 webdriver-manager>=4.0.1
 seleniumbase>=4.37.2
+playwright>=1.40.0
+playwright-stealth>=1.0.6
